@@ -97,6 +97,48 @@ public class BinaryTreeBuildingAndTraversals {
 
             }
         }
+
+        static int height(Node root) {
+
+            if (root == null) {
+                return 0;
+            }
+
+            int lh = height(root.left);
+            int rh = height(root.right);
+
+            int heightOfTree = Math.max(lh, rh) + 1;
+            
+            return heightOfTree;
+        }
+
+        static int countNumberOfNodes(Node root) {
+
+            if (root == null) {
+                return 0;
+            }
+
+            int leftCount = countNumberOfNodes(root.left);
+            int rightCount = countNumberOfNodes(root.right);
+
+            int totalCount = leftCount + rightCount + 1;
+
+            return totalCount;
+        }
+      
+        static int sumOfNodes(Node root) {
+
+            if (root == null) {
+                return 0;
+            }
+
+            int leftSum =  sumOfNodes(root.left);
+            int rightSum = sumOfNodes(root.right);
+
+            int totalSum = leftSum + rightSum + root.data;
+
+            return totalSum;
+        }
     }
 
     public static void main(String[] args) {
@@ -108,12 +150,21 @@ public class BinaryTreeBuildingAndTraversals {
         System.out.println("data of root node is: " + root.data);
 
         tree.preOrderTraversal(root);
+
         System.out.println();
         tree.inOrderTraversal(root);
+
         System.out.println();
         tree.postOrderTraversal(root);
+
         System.out.println();
-        tree.levelOrderTraversal(root);
-        
+        tree.levelOrderTraversal((root));
+
+        System.out.println();
+        System.out.println(tree.height(root));
+
+        System.out.println(tree.countNumberOfNodes(root));
+
+        System.out.println(tree.sumOfNodes(root));
     }
 }
