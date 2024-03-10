@@ -1,7 +1,16 @@
+/* 
+        1
+       / \
+      2   3
+     / \   \
+    4   5   6  
+
+*/
+
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class BinaryTreeBuildingAndTraversals {
+public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
 
     static class Node {
         int data;
@@ -139,6 +148,84 @@ public class BinaryTreeBuildingAndTraversals {
 
             return totalSum;
         }
+
+        // diameter of a binary tree is defined as the maximum no. of nodes between 2 leaves.
+        static int diameterApproach1(Node root) {    // O(n^2)
+
+            if (root == null) {
+                return 0;
+            }
+
+            int leftDiameter = diameterApproach1(root.left);
+            int leftHeight = height(root.left);
+            
+            int rightDiameter = diameterApproach1(root.right);
+            int rightHeight = height(root.right);
+
+            int selfDiameter = leftHeight + rightHeight + 1;
+
+            return Math.max(selfDiameter, Math.max(leftDiameter, rightDiameter));
+        }
+
+        static class Info {
+            int diam;
+            int ht;
+            
+            Info(int diam, int ht) {
+                this.diam = diam;
+                this.ht = ht;
+            }
+        }
+
+        // here we have calculated the diameter and height for a root node in one go
+        static Info diameterApproach2(Node root) {  // O(n)
+
+            if (root == null) {
+                return new Info(0, 0);
+            }
+            
+            Info leftInfo = diameterApproach2(root.left);
+            Info rightInfo = diameterApproach2(root.right);
+
+            int selfDiameter = leftInfo.ht + rightInfo.ht + 1;
+
+            int diameter = Math.max(selfDiameter, Math.max(leftInfo.diam, rightInfo.diam));
+            int height = Math.max(leftInfo.ht, rightInfo.ht) + 1;
+
+            return new Info(diameter, height);
+        }
+
+        static boolean isIdentical(Node n, Node subRoot) {
+            if (n == null && subRoot == null) {
+                return true;
+            }
+            else if (n == null || subRoot == null || n.data != subRoot.data) {
+                return false;
+            }
+
+            //checking for left and right subtrees
+            if (!isIdentical(n.left, subRoot.left)) {
+                return false;
+            }
+            if (!isIdentical(n.right, subRoot.right)) {
+                return false;              
+            }
+
+            return true;
+        }
+
+        static boolean isSubTree(Node root, Node subRoot) {
+
+            if (root == null) {
+                return false;
+            }
+            if (root.data == subRoot.data) {
+                if (isIdentical(root, subRoot)) {
+                    return true;                    
+                }
+            }
+            return isSubTree(root.left, subRoot) || isSubTree(root.right, subRoot);
+        }
     }
 
     public static void main(String[] args) {
@@ -166,5 +253,16 @@ public class BinaryTreeBuildingAndTraversals {
         System.out.println(tree.countNumberOfNodes(root));
 
         System.out.println(tree.sumOfNodes(root));
+
+        System.out.println(tree.diameterApproach1(root));
+
+        System.out.println(tree.diameterApproach2(root).diam);
+
+        // creating a sub tree
+        Node subRoot = new Node(2);
+        subRoot.left = new Node(4);
+        subRoot.right = new Node(5);
+
+        System.out.println(tree.isSubTree(root, subRoot));
     }
 }
