@@ -47,7 +47,7 @@ public class basicLinkedListOperations {
 
     void addMiddle(int index, int data) {
 
-        //special case of adding ata first
+        //special case of adding data first
         if (index == 0) {
             addFirst(data);
             return;
@@ -269,6 +269,7 @@ public class basicLinkedListOperations {
         re-initialise the slow pointer to head and then move both slow and fast pointers at same pace until
         they meet again which will be the node where we need to break the loop from. Also keep a track of prev of
         fast and then make its next as null.*/
+        
         Node prev = null;
         if (isLooped) {
             slow = head;
