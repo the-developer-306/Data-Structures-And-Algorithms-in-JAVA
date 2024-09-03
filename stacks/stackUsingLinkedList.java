@@ -1,4 +1,4 @@
-public class stackUsingLinkdLIst {
+public class stackUsingLinkedList {
 
     static class Node {
         int val;

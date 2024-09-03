@@ -10,12 +10,11 @@ public class Kadanes {
         for (int i = 0; i < arr.length; i++) {
             currSum += arr[i];
 
-            currSum = currSum<0 ? 0 : currSum;
+            currSum = currSum < 0 ? 0 : currSum;
 
             maxSum = Math.max(currSum, maxSum);
 
         }
         System.out.println(maxSum);
     }
-
 }
