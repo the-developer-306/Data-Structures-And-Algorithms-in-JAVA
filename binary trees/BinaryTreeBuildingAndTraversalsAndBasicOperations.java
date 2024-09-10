@@ -7,6 +7,7 @@
 
 */
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -62,6 +63,7 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
             inOrderTraversal(root.right);
         }
 
+        // post-order: Left-->Right-->Root (LRR)
         static void postOrderTraversal(Node root) {
             if (root == null) {
                 return;
@@ -71,7 +73,7 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
             System.out.print(root.data + ", ");
         }
 
-        static void levelOrderTraversal(Node root) {
+        static void levelOrderTraversal(Node root) { 
             if (root == null) {
                 return;
             }
@@ -167,32 +169,32 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
             return Math.max(selfDiameter, Math.max(leftDiameter, rightDiameter));
         }
 
-        static class Info {
+        static class Info1 {
             int diam;
             int ht;
             
-            Info(int diam, int ht) {
+            Info1(int diam, int ht) {
                 this.diam = diam;
                 this.ht = ht;
             }
         }
 
         // here we have calculated the diameter and height for a root node in one go
-        static Info diameterApproach2(Node root) {  // O(n)
+        static Info1 diameterApproach2(Node root) {  // O(n)
 
             if (root == null) {
-                return new Info(0, 0);
+                return new Info1(0, 0);
             }
             
-            Info leftInfo = diameterApproach2(root.left);
-            Info rightInfo = diameterApproach2(root.right);
+            Info1 leftInfo = diameterApproach2(root.left);
+            Info1 rightInfo = diameterApproach2(root.right);
 
             int selfDiameter = leftInfo.ht + rightInfo.ht + 1;
 
             int diameter = Math.max(selfDiameter, Math.max(leftInfo.diam, rightInfo.diam));
             int height = Math.max(leftInfo.ht, rightInfo.ht) + 1;
 
-            return new Info(diameter, height);
+            return new Info1(diameter, height);
         }
 
         static boolean isIdentical(Node n, Node subRoot) {
@@ -226,11 +228,65 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
             }
             return isSubTree(root.left, subRoot) || isSubTree(root.right, subRoot);
         }
+
+        static class Info2 {
+            Node node;
+            int hd;
+            
+            Info2(Node node, int hd) {
+                this.node = node;
+                this.hd = hd;
+            }
+        }
+
+        static void topView(Node root) {
+
+            Queue<Info2> q = new LinkedList<>();
+            HashMap<Integer, Node> map = new HashMap<>();
+            int min = 0, max = 0;
+
+            q.add(new Info2(root, 0));
+            q.add(null);
+
+            while (!q.isEmpty()) {
+                Info2 curr = q.remove();
+
+                if (curr == null) {
+                    if (q.isEmpty()) {
+                        break;
+                    } else {
+                        q.add(null);
+                    }
+                } else {
+
+                    if (!map.containsKey(curr.hd)) {
+                        map.put(curr.hd, curr.node);
+                        min = Math.min(min, curr.hd);
+                        max = Math.max(max, curr.hd);
+                    }
+
+                    if(curr.node.left != null) {
+                        q.add(new Info2(curr.node.left, curr.hd-1));
+
+                    }
+
+                    if (curr.node.right != null) {
+                        q.add(new Info2(curr.node.right, curr.hd+1));
+                    }
+                }
+            }
+
+            for(int i = min; i<=max; i++) {
+                System.out.print(map.get(i).data + ", ");
+            }
+
+        }
+
     }
 
     public static void main(String[] args) {
         
-        int nodes[] = {1, 2, 4, -1, -1, 5, -1, -1, 3, -1, 6, -1, -1};
+        int nodes[] = {1, 2, 4, -1, -1, 5, -1, -1, 3, 6, -1, -1, 7, -1, -1};
 
         BinaryTree tree = new BinaryTree();
         Node root = tree.buildTree(nodes);
@@ -264,5 +320,8 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
         subRoot.right = new Node(5);
 
         System.out.println(tree.isSubTree(root, subRoot));
+
+        tree.topView(root);
+
     }
 }

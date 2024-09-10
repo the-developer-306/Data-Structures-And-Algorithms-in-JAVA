@@ -6,6 +6,7 @@ public class queueUsingJCF {
         q.add(1);
         q.add(2);
         q.add(3);
+        q.remove();
         System.out.println("Queue after adding elements: " + q);
     }
 }
