@@ -10,6 +10,7 @@
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.ArrayList;
 
 public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
 
@@ -73,7 +74,7 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
             System.out.print(root.data + ", ");
         }
 
-        static void levelOrderTraversal(Node root) { 
+        static void levelOrderTraversal(Node root) {
             if (root == null) {
                 return;
             }
@@ -82,7 +83,7 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
             q.add(root);
             q.add(null);
 
-            while(!q.isEmpty()) {
+            while (!q.isEmpty()) {
 
                 Node currNode = q.remove();
 
@@ -90,14 +91,12 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
                     System.out.println();
                     if (q.isEmpty()) {
                         break;
-                    }
-                    else {
+                    } else {
                         q.add(currNode);
                     }
-                }
-                else {
+                } else {
                     System.out.print(currNode.data + ", ");
-                    
+
                     if (currNode.left != null) {
                         q.add(currNode.left);
                     }
@@ -119,7 +118,7 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
             int rh = height(root.right);
 
             int heightOfTree = Math.max(lh, rh) + 1;
-            
+
             return heightOfTree;
         }
 
@@ -136,14 +135,14 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
 
             return totalCount;
         }
-      
+
         static int sumOfNodes(Node root) {
 
             if (root == null) {
                 return 0;
             }
 
-            int leftSum =  sumOfNodes(root.left);
+            int leftSum = sumOfNodes(root.left);
             int rightSum = sumOfNodes(root.right);
 
             int totalSum = leftSum + rightSum + root.data;
@@ -151,8 +150,9 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
             return totalSum;
         }
 
-        // diameter of a binary tree is defined as the maximum no. of nodes between 2 leaves.
-        static int diameterApproach1(Node root) {    // O(n^2)
+        // diameter of a binary tree is defined as the maximum no. of nodes between 2
+        // leaves.
+        static int diameterApproach1(Node root) { // O(n^2)
 
             if (root == null) {
                 return 0;
@@ -160,7 +160,7 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
 
             int leftDiameter = diameterApproach1(root.left);
             int leftHeight = height(root.left);
-            
+
             int rightDiameter = diameterApproach1(root.right);
             int rightHeight = height(root.right);
 
@@ -172,7 +172,7 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
         static class Info1 {
             int diam;
             int ht;
-            
+
             Info1(int diam, int ht) {
                 this.diam = diam;
                 this.ht = ht;
@@ -180,12 +180,12 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
         }
 
         // here we have calculated the diameter and height for a root node in one go
-        static Info1 diameterApproach2(Node root) {  // O(n)
+        static Info1 diameterApproach2(Node root) { // O(n)
 
             if (root == null) {
                 return new Info1(0, 0);
             }
-            
+
             Info1 leftInfo = diameterApproach2(root.left);
             Info1 rightInfo = diameterApproach2(root.right);
 
@@ -200,17 +200,16 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
         static boolean isIdentical(Node n, Node subRoot) {
             if (n == null && subRoot == null) {
                 return true;
-            }
-            else if (n == null || subRoot == null || n.data != subRoot.data) {
+            } else if (n == null || subRoot == null || n.data != subRoot.data) {
                 return false;
             }
 
-            //checking for left and right subtrees
+            // checking for left and right subtrees
             if (!isIdentical(n.left, subRoot.left)) {
                 return false;
             }
             if (!isIdentical(n.right, subRoot.right)) {
-                return false;              
+                return false;
             }
 
             return true;
@@ -223,7 +222,7 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
             }
             if (root.data == subRoot.data) {
                 if (isIdentical(root, subRoot)) {
-                    return true;                    
+                    return true;
                 }
             }
             return isSubTree(root.left, subRoot) || isSubTree(root.right, subRoot);
@@ -232,7 +231,7 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
         static class Info2 {
             Node node;
             int hd;
-            
+
             Info2(Node node, int hd) {
                 this.node = node;
                 this.hd = hd;
@@ -265,28 +264,213 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
                         max = Math.max(max, curr.hd);
                     }
 
-                    if(curr.node.left != null) {
-                        q.add(new Info2(curr.node.left, curr.hd-1));
+                    if (curr.node.left != null) {
+                        q.add(new Info2(curr.node.left, curr.hd - 1));
 
                     }
 
                     if (curr.node.right != null) {
-                        q.add(new Info2(curr.node.right, curr.hd+1));
+                        q.add(new Info2(curr.node.right, curr.hd + 1));
                     }
                 }
             }
 
-            for(int i = min; i<=max; i++) {
+            for (int i = min; i <= max; i++) {
                 System.out.print(map.get(i).data + ", ");
             }
 
         }
 
+        static void kthlvl_recursive(Node root, int lvl, int k) {
+            if (root == null) {
+                return;
+            }
+
+            if (lvl == k) {
+                System.out.print(root.data + ", ");
+                return;
+            }
+
+            kthlvl_recursive(root.left, lvl + 1, k);
+            kthlvl_recursive(root.right, lvl + 1, k);
+        }
+
+        static void kthlvl_iterative(Node root, int lvl, int k) {
+
+            if (root == null) {
+                return;
+            }
+
+            Queue<Node> q = new LinkedList<>();
+            q.add(root);
+            q.add(null);
+
+            while (!q.isEmpty()) {
+                Node curr = q.remove();
+
+                if (curr == null) {
+                    if (q.isEmpty()) {
+                        break;
+                    } else {
+                        q.add(curr);
+                        lvl++;
+                    }
+                } else {
+
+                    if (lvl == k) {
+                        System.out.print(curr.data + ", ");
+                    }
+
+                    if (curr.left != null) {
+                        q.add(curr.left);
+                    }
+
+                    if (curr.right != null) {
+                        q.add(curr.right);
+                    }
+                }
+            }
+        }
+
+        // approach 1
+        static Node lca1(Node root, int n1, int n2) {
+
+            ArrayList<Node> path1 = new ArrayList<>();
+            ArrayList<Node> path2 = new ArrayList<>();
+
+            getPath(root, n1, path1);
+            getPath(root, n2, path2);
+
+            int i = 0;
+            for (i = 0; i < path1.size() && i < path2.size(); i++) {
+                if (path1.get(i) != path2.get(i)) {
+                    break;
+                }
+            }
+
+            Node lca = path1.get(i - 1);
+            return lca;
+        }
+
+        static boolean getPath(Node root, int n, ArrayList<Node> path) {
+
+            if (root == null) {
+                return false;
+            }
+            path.add(root);
+
+            if (root.data == n) {
+                return true;
+            }
+
+            boolean foundLeft = getPath(root.left, n, path);
+            boolean foundRight = getPath(root.right, n, path);
+
+            if (foundRight || foundLeft) {
+                return true;
+            }
+
+            path.remove(path.size() - 1);
+            return false;
+        }
+
+        static Node lca2(Node root, int n1, int n2) {
+
+            if (root == null || root.data == n1 || root.data == n2) { // if root is found then best
+                return root;
+            }
+
+            Node leftLca = lca2(root.left, n1, n2); // searching in left subtree
+            Node rightLca = lca2(root.right, n1, n2); // searching in right subtree
+
+            if (rightLca == null) { // if not found in right then return leftLca
+                return leftLca;
+            }
+
+            if (leftLca == null) { // if not found in left then return right
+                return rightLca;
+            }
+
+            return root; // if found in both then root is the lca
+        }
+
+        static int lcaDist(Node root, int n) {
+            if (root == null) {
+                return -1;
+            }
+
+            if (root.data == n) {
+                return 0;
+            }
+
+            int leftDist = lcaDist(root.left, n);
+            int rightDist = lcaDist(root.right, n);
+
+            if (leftDist == -1 && rightDist == -1) {
+                return -1;
+            } else if (leftDist == -1) {
+                return ++rightDist;
+            } else {
+                return ++leftDist;
+            }
+
+        }
+
+        static int minDist(Node root, int n1, int n2) {
+            Node lca = lca2(root, n1, n2);
+
+            return lcaDist(lca, n1) + lcaDist(lca, n2);
+        }
+
+        static int kthAncestor(Node root, int n, int k) {
+
+            if (root == null) {
+                return -1;
+            }
+
+            if (root.data == n) {
+                return 0;
+            }
+
+            int leftDist = kthAncestor(root.left, n, k);
+            int rightDist = kthAncestor(root.right, n, k);
+
+            if (leftDist == -1 && rightDist == -1) {
+                return -1;
+            }
+
+            int max = Math.max(leftDist, rightDist);
+
+            if (max + 1 == k) {
+                System.out.println(root.data);
+            }
+            return max + 1;
+        }
+        static int transformSumTree(Node root) {
+            
+            if (root == null) {
+                return 0;
+            }
+    
+            int leftChild = transformSumTree(root.left);
+            int rightChild = transformSumTree(root.right);
+    
+            int data = root.data;
+    
+            int newL = root.left == null ? 0 : root.left.data;
+            int newR = root.right == null ? 0 : root.right.data;
+    
+            root.data = newL + leftChild + newR + rightChild;
+    
+            return data;
+    
+        }
     }
 
+
     public static void main(String[] args) {
-        
-        int nodes[] = {1, 2, 4, -1, -1, 5, -1, -1, 3, 6, -1, -1, 7, -1, -1};
+
+        int nodes[] = { 1, 2, 4, -1, -1, 5, -1, -1, 3, 6, -1, -1, 7, -1, -1 };
 
         BinaryTree tree = new BinaryTree();
         Node root = tree.buildTree(nodes);
@@ -323,5 +507,26 @@ public class BinaryTreeBuildingAndTraversalsAndBasicOperations {
 
         tree.topView(root);
 
+        System.out.println();
+
+        tree.kthlvl_recursive(root, 1, 2);
+
+        System.out.println();
+
+        tree.kthlvl_iterative(root, 1, 3);
+
+        System.out.println();
+
+        System.out.println(tree.lca1(root, 4, 7).data);
+
+        System.out.println(tree.lca2(root, 4, 7).data);
+
+        System.out.println(tree.minDist(root, 4, 6));
+
+        tree.kthAncestor(root, 5, 2);
+
+        tree.transformSumTree(root);
+
+        tree.preOrderTraversal(root);
     }
 }
